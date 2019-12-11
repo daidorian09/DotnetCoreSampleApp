@@ -10,12 +10,13 @@ namespace SampleApp.Persistence.Infrastructure
         IDesignTimeDbContextFactory<TContext> where TContext : DbContext
     {
 
-        private const string ConnectionStringName = "TYGraphqlDemoDb";
+        private const string ConnectionStringName = "SampleDotnetCoreDb";
         private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
         public TContext CreateDbContext(string[] args)
         {
-            var basePath = Directory.GetCurrentDirectory() + string.Format("{0}..{0}TY.GraphQL", Path.DirectorySeparatorChar);
+            var basePath = Directory.GetCurrentDirectory() +
+                           string.Format("{0}..{0}DotnetCoreSampleApp", Path.DirectorySeparatorChar);
 
             return Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
         }
@@ -46,7 +47,10 @@ namespace SampleApp.Persistence.Infrastructure
             Console.WriteLine($"DesignTimeDbContextFactoryBase.Create(string): Connection string: '{connectionString}'.");
 
             var optionsBuilder = new DbContextOptionsBuilder<TContext>();
-            optionsBuilder.UseSqlServer(connectionString);
+
+            optionsBuilder.UseSqlServer(connectionString)
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging();
 
             return CreateNewInstance(optionsBuilder.Options);
         }

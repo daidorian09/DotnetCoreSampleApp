@@ -1,11 +1,11 @@
-﻿using System;
+﻿using SampleApp.Data;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SampleApp.Data;
 
 namespace SampleApp.Persistence.Infrastructure
 {
-    public interface IGenericRepository<TEntity> where TEntity : IBaseEntity
+    public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         Task CreateAsync(TEntity entity);
 
@@ -14,8 +14,6 @@ namespace SampleApp.Persistence.Infrastructure
         Task DeleteAsync(TEntity entity);
 
         Task DeleteByIdAsync(string id);
-
-        Task DeleteBulkAsync(List<TEntity> entities);
 
         Task Update(TEntity entity);
 

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetCoreSampleApp", "Dotn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp.Data", "SampleApp.Data\SampleApp.Data.csproj", "{6AADE6D9-BFCB-43B2-97C3-C1437D356D15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Persistence", "SampleApp.Persistence\SampleApp.Persistence.csproj", "{BC672385-F49C-413D-8159-2D8871A82562}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp.Persistence", "SampleApp.Persistence\SampleApp.Persistence.csproj", "{BC672385-F49C-413D-8159-2D8871A82562}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Application", "SampleApp.Application\SampleApp.Application.csproj", "{4BC86933-2CB3-4927-BE5C-DCCCF20FD02A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{BC672385-F49C-413D-8159-2D8871A82562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC672385-F49C-413D-8159-2D8871A82562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC672385-F49C-413D-8159-2D8871A82562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BC86933-2CB3-4927-BE5C-DCCCF20FD02A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BC86933-2CB3-4927-BE5C-DCCCF20FD02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BC86933-2CB3-4927-BE5C-DCCCF20FD02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BC86933-2CB3-4927-BE5C-DCCCF20FD02A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SampleApp.Data
 {
-    public class Category : IBaseEntity
+    public class Category : BaseEntity
     {
         #region Ctor
 
@@ -13,12 +12,7 @@ namespace SampleApp.Data
         }
 
         #endregion
-
-        public string Id { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public bool IsDeleted { get; set; }
-
+        
         public string ParentId { get; set; }
         public Category Parent { get; set; }
         public string Name { get; set; }

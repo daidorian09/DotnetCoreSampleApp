@@ -2,14 +2,14 @@
 
 namespace SampleApp.Data
 {
-    public interface IBaseEntity
+    public abstract class BaseEntity
     {
-        string Id { get; }
+        public string Id { get; set; }
 
-        DateTime? CreatedAt { get; }
+        public DateTime? CreatedAt { get; set; }
 
-        DateTime? ModifiedAt { get; }
+        public DateTime? ModifiedAt { get; set; }
 
-        bool IsDeleted { get; }
+        public bool IsDeleted { get; set; }
     }
 }

@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using SampleApp.Application.Internal;
+using SampleApp.Persistence.Internal;
 
 namespace DotnetCoreSampleApp
 {
@@ -20,6 +22,19 @@ namespace DotnetCoreSampleApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            #region Persistence Services
+
+            services.AddPersistence();
+
+            #endregion
+
+            #region Application Services
+
+            services.AddApplication();
+
+            #endregion
+
 
             services.AddSwaggerGen(c =>
             {
