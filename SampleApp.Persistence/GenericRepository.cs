@@ -69,7 +69,7 @@ namespace SampleApp.Persistence
 
         public async Task<TEntity> GetById(string id)
         {
-            return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(q => q.Id.Equals(id));
+            return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(q => q.Id.Equals(id) && !q.IsDeleted);
         }
 
         public async Task SaveChangesAsync()

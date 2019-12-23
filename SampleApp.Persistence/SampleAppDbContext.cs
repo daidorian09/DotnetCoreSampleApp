@@ -20,8 +20,7 @@ namespace SampleApp.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
+            builder.ApplyConfigurationsFromAssembly(typeof(SampleAppDbContext).Assembly);
             base.OnModelCreating(builder);
         }
     }

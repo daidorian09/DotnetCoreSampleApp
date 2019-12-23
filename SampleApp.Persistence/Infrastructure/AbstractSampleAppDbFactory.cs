@@ -41,7 +41,8 @@ namespace SampleApp.Persistence.Infrastructure
         {
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw new ArgumentException($"Connection string '{ConnectionStringName}' is null or empty.", nameof(connectionString));
+                throw new ArgumentException($"Connection string '{ConnectionStringName}' is null or empty.",
+                    nameof(connectionString));
             }
 
             Console.WriteLine($"DesignTimeDbContextFactoryBase.Create(string): Connection string: '{connectionString}'.");

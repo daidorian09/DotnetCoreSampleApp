@@ -1,11 +1,12 @@
+using DotnetCoreSampleApp.Internal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SampleApp.Application.Internal;
-using SampleApp.Persistence.Internal;
 
 namespace DotnetCoreSampleApp
 {
@@ -23,17 +24,17 @@ namespace DotnetCoreSampleApp
         {
             services.AddControllers();
 
-            #region Persistence Services
-
-            services.AddPersistence();
-
-            #endregion
-
             #region Application Services
 
-            services.AddApplication();
+            services.AddApplication(Configuration);
 
             #endregion
+
+            // Default API Behavior
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
 
 
             services.AddSwaggerGen(c =>
@@ -49,6 +50,8 @@ namespace DotnetCoreSampleApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseGlobalExceptionHandler();
 
             app.UseHttpsRedirection();
 
