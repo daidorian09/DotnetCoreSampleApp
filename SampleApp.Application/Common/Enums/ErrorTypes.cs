@@ -2,8 +2,8 @@
 {
     public enum ErrorTypes
     {
-        DeletedParent = 1,
-        AlreadyExists = 2,
-        EntityNotFound = 3
+        AlreadyExists = 1,
+        EntityNotFound = 2,
+        CategoryAndParentSame = 3
     }
 }

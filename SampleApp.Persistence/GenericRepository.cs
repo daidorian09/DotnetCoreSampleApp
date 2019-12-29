@@ -63,7 +63,7 @@ namespace SampleApp.Persistence
 
         public async Task<IEnumerable<TEntity>> Filter(Func<TEntity, bool> predicate)
         {
-            var entities = _dbContext.Set<TEntity>().Where(predicate);
+            var entities = _dbContext.Set<TEntity>().AsNoTracking().AsEnumerable().Where(predicate);
             return await Task.FromResult(entities.ToList());
         }
 

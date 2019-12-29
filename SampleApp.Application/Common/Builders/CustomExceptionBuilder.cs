@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using Microsoft.Data.SqlClient;
 using SampleApp.Application.Common.Enums;
+using SampleApp.Application.Internal;
 using SampleApp.Data;
 
 namespace SampleApp.Application.Common.Builders
@@ -29,14 +30,14 @@ namespace SampleApp.Application.Common.Builders
             return default;
         }
 
-        public ResponseModel<T> BuildEntityNotFound<T>(ResponseModel<T> response, string id)
+        public ResponseModel<T> BuildEntityNotFound<T>(ResponseModel<T> response, string id, ErrorTypes errorType)
         {
             response.Status = HttpStatusCode.NotFound;
             response.Errors = new List<ErrorResponse>()
             {
                 new ErrorResponse()
                 {
-                    Reason = (int)ErrorTypes.EntityNotFound,
+                    Reason = errorType.EnumToInt(),
                     Message = $"{id} is not found"
                 }
             };

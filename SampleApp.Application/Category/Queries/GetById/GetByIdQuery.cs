@@ -4,7 +4,7 @@ using SampleApp.Data;
 
 namespace SampleApp.Application.Category.Queries.GetById
 {
-    public class GetByIdQuery : BaseGetByIdRequest, IRequest<ResponseModel<Data.Category>>
+    public class GetByIdQuery : BaseIdRequest, IRequest<ResponseModel<Data.Category>>
     {
     }
 }

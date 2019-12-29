@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using SampleApp.Application.Common.Builders;
+using SampleApp.Application.Common.Enums;
 using SampleApp.Data;
 using SampleApp.Persistence.Infrastructure;
 using System;
@@ -7,25 +9,23 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using SampleApp.Application.Common.Builders;
-using SampleApp.Application.Common.Enums;
 
-namespace SampleApp.Application.Category.Commands.Create
+namespace SampleApp.Application.Category.Commands.Update
 {
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, ResponseModel<bool>>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, ResponseModel<bool>>
     {
         #region Members
 
         private readonly IGenericRepository<Data.Category> _categoryRepository;
-        private readonly ILogger<CreateCategoryCommandHandler> _logger;
+        private readonly ILogger<UpdateCategoryCommandHandler> _logger;
         private readonly ICustomExceptionBuilder _customExceptionBuilder;
 
         #endregion
 
         #region Ctor
 
-        public CreateCategoryCommandHandler(IGenericRepository<Data.Category> categoryRepository,
-            ILogger<CreateCategoryCommandHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
+        public UpdateCategoryCommandHandler(IGenericRepository<Data.Category> categoryRepository,
+            ILogger<UpdateCategoryCommandHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
         {
             _categoryRepository = categoryRepository;
             _logger = logger;
@@ -34,7 +34,7 @@ namespace SampleApp.Application.Category.Commands.Create
 
         #endregion
 
-        public async Task<ResponseModel<bool>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseModel<bool>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var response = new ResponseModel<bool>()
             {
@@ -51,25 +51,33 @@ namespace SampleApp.Application.Category.Commands.Create
                 if (!string.IsNullOrEmpty(request.ParentId))
                 {
                     parentCategory = await _categoryRepository.GetById(request.ParentId);
-
                     if (parentCategory is null)
                     {
-                        _logger.LogWarning($"{request.ParentId} is deleted");
+                        _logger.LogWarning($"{request.ParentId} is deleted parent");
                         return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.EntityNotFound);
+                    }
+
+                    var isParentAndCategorySame = parentCategory.Id.Equals(request.Id);
+                    if (isParentAndCategorySame)
+                    {
+                        _logger.LogWarning("Child and Parent cannot be same");
+                        return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.CategoryAndParentSame);
                     }
                 }
 
-                var category = new Data.Category()
+                var category = await _categoryRepository.GetById(request.Id);
+                if (category is null)
                 {
-                    ParentId = request.ParentId,
-                    Description = request.Description,
-                    Name = request.Name,
-                    Parent = parentCategory,
-                    Id = request.Id
-                };
+                    _logger.LogWarning($"{request.Id} is deleted");
+                    return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.EntityNotFound);
+                }
 
-                await _categoryRepository.CreateAsync(category);
-                response.Status = HttpStatusCode.Created;
+                category.Description = request.Description;
+                category.Name = request.Name;
+                category.Parent = parentCategory;
+
+                await _categoryRepository.Update(category);
+                response.Status = HttpStatusCode.OK;
                 response.IsSuccessful = true;
                 response.Result = true;
 
@@ -77,12 +85,7 @@ namespace SampleApp.Application.Category.Commands.Create
             }
             catch (Exception e)
             {
-                _logger.LogCritical(e, e.StackTrace, "Method : CreateCategoryCommandHandler - Handle");
-
-                var identicalPrimaryKeyExceptionResponse =
-                    _customExceptionBuilder.BuildIdenticalPrimaryKeyException(e, response, request.Id);
-
-                if (identicalPrimaryKeyExceptionResponse != null) return identicalPrimaryKeyExceptionResponse;
+                _logger.LogCritical(e, e.StackTrace, "Method : UpdateCategoryCommandHandler - Handle");
             }
 
             response.Errors = new List<ErrorResponse>()

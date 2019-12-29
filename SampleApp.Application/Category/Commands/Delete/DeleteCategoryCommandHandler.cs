@@ -10,22 +10,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using SampleApp.Application.Common.Enums;
 
-namespace SampleApp.Application.Category.Queries.GetById
+namespace SampleApp.Application.Category.Commands.Delete
 {
-    public class GetByIdQueryHandler : IRequestHandler<GetByIdQuery, ResponseModel<Data.Category>>
+    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, ResponseModel<bool>>
     {
         #region Members
 
         private readonly IGenericRepository<Data.Category> _categoryRepository;
-        private readonly ILogger<GetByIdQueryHandler> _logger;
+        private readonly ILogger<DeleteCategoryCommandHandler> _logger;
         private readonly ICustomExceptionBuilder _customExceptionBuilder;
 
         #endregion
 
         #region Ctor
 
-        public GetByIdQueryHandler(IGenericRepository<Data.Category> categoryRepository,
-            ILogger<GetByIdQueryHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
+        public DeleteCategoryCommandHandler(IGenericRepository<Data.Category> categoryRepository,
+            ILogger<DeleteCategoryCommandHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
         {
             _categoryRepository = categoryRepository;
             _logger = logger;
@@ -33,13 +33,14 @@ namespace SampleApp.Application.Category.Queries.GetById
         }
 
         #endregion
-        public async Task<ResponseModel<Data.Category>> Handle(GetByIdQuery request, CancellationToken cancellationToken)
+        
+        public async Task<ResponseModel<bool>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var response = new ResponseModel<Data.Category>()
+            var response = new ResponseModel<bool>()
             {
-                Status = HttpStatusCode.InternalServerError,
-                IsSuccessful = false,
-                Result = default,
+                Status = HttpStatusCode.InternalServerError, 
+                IsSuccessful = false, 
+                Result = false, 
                 Errors = default
             };
 
@@ -48,17 +49,20 @@ namespace SampleApp.Application.Category.Queries.GetById
                 var category = await _categoryRepository.GetById(request.Id);
                 if (category is null)
                 {
+                    _logger.LogWarning($"{request.Id} is deleted parent");
                     return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.EntityNotFound);
                 }
 
+                await _categoryRepository.DeleteAsync(category);
+                response.Status = HttpStatusCode.OK;
                 response.IsSuccessful = true;
-                response.Result = category;
+                response.Result = true;
 
                 return response;
             }
             catch (Exception e)
             {
-                _logger.LogCritical(e, e.StackTrace, "Method : GetByIdQueryHandler - Handle / Category");
+                _logger.LogCritical(e, e.StackTrace,"Method : DeleteCategoryCommandHandler - Handle");
             }
 
             response.Errors = new List<ErrorResponse>()
