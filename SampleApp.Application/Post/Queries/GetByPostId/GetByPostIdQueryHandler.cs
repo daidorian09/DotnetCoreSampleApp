@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using SampleApp.Application.Common.Builders;
+using SampleApp.Application.Common.Enums;
 using SampleApp.Data;
 using SampleApp.Persistence.Infrastructure;
 using System;
@@ -8,34 +9,34 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using SampleApp.Application.Common.Enums;
+using SampleApp.Application.Post.Queries.GetByPostId;
 
-namespace SampleApp.Application.Category.Queries.GetById
+namespace SampleApp.Application.Post.Queries.GetByPostId
 {
-    public class GetByIdQueryHandler : IRequestHandler<GetByIdQuery, ResponseModel<Data.Category>>
+    public class GetByPostIdQueryHandler : IRequestHandler<GetByPostIdQuery, ResponseModel<Data.Post>>
     {
         #region Members
 
-        private readonly IGenericRepository<Data.Category> _categoryRepository;
-        private readonly ILogger<GetByIdQueryHandler> _logger;
+        private readonly IGenericRepository<Data.Post> _postRepository;
+        private readonly ILogger<GetByPostIdQueryHandler> _logger;
         private readonly ICustomExceptionBuilder _customExceptionBuilder;
 
         #endregion
 
         #region Ctor
 
-        public GetByIdQueryHandler(IGenericRepository<Data.Category> categoryRepository,
-            ILogger<GetByIdQueryHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
+        public GetByPostIdQueryHandler(IGenericRepository<Data.Post> postRepository,
+            ILogger<GetByPostIdQueryHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
         {
-            _categoryRepository = categoryRepository;
+            _postRepository = postRepository;
             _logger = logger;
             _customExceptionBuilder = customExceptionBuilder;
         }
 
         #endregion
-        public async Task<ResponseModel<Data.Category>> Handle(GetByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseModel<Data.Post>> Handle(GetByPostIdQuery request, CancellationToken cancellationToken)
         {
-            var response = new ResponseModel<Data.Category>()
+            var response = new ResponseModel<Data.Post>()
             {
                 Status = HttpStatusCode.InternalServerError,
                 IsSuccessful = false,
@@ -45,20 +46,20 @@ namespace SampleApp.Application.Category.Queries.GetById
 
             try
             {
-                var category = await _categoryRepository.GetById(request.Id);
-                if (category is null)
+                var post = await _postRepository.GetById(request.Id);
+                if (post is null)
                 {
                     return _customExceptionBuilder.BuildEntityNotFoundException(response, request.Id, ErrorTypes.EntityNotFound);
                 }
 
                 response.IsSuccessful = true;
-                response.Result = category;
+                response.Result = post;
 
                 return response;
             }
             catch (Exception e)
             {
-                _logger.LogCritical(e, e.StackTrace, "Method : GetByIdQueryHandler - Handle / Category");
+                _logger.LogCritical(e, e.StackTrace, "Method : GetByPostIdQueryHandler - Handle / Post");
             }
 
             response.Errors = new List<ErrorResponse>()

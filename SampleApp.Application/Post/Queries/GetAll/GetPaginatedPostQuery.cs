@@ -2,9 +2,9 @@
 using SampleApp.Application.Internal;
 using SampleApp.Data;
 
-namespace SampleApp.Application.Category.Queries.GetAll
+namespace SampleApp.Application.Post.Queries.GetAll
 {
-    public class GetPaginatedCategoryQuery : IRequest<ResponseModel<PaginatedResult<Data.Category>>>
+    public class GetPaginatedPostQuery : IRequest<ResponseModel<PaginatedResult<Data.Post>>>
     {
         public int PageIndex { get; set; }
         public int PageSize { get; set; }

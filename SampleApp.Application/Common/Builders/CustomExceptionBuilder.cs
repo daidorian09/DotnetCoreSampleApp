@@ -30,7 +30,7 @@ namespace SampleApp.Application.Common.Builders
             return default;
         }
 
-        public ResponseModel<T> BuildEntityNotFound<T>(ResponseModel<T> response, string id, ErrorTypes errorType)
+        public ResponseModel<T> BuildEntityNotFoundException<T>(ResponseModel<T> response, string id, ErrorTypes errorType)
         {
             response.Status = HttpStatusCode.NotFound;
             response.Errors = new List<ErrorResponse>()
@@ -39,6 +39,21 @@ namespace SampleApp.Application.Common.Builders
                 {
                     Reason = errorType.EnumToInt(),
                     Message = $"{id} is not found"
+                }
+            };
+
+            return response;
+        }
+
+        public ResponseModel<T> BuildMaliciousInputFoundException<T>(ResponseModel<T> response, string input, ErrorTypes errorType)
+        {
+            response.Status = HttpStatusCode.BadRequest;
+            response.Errors = new List<ErrorResponse>()
+            {
+                new ErrorResponse()
+                {
+                    Reason = errorType.EnumToInt(),
+                    Message = $"{input} is malicious"
                 }
             };
 

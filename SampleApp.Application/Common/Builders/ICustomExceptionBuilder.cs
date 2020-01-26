@@ -7,6 +7,7 @@ namespace SampleApp.Application.Common.Builders
     public interface ICustomExceptionBuilder
     {
         ResponseModel<T> BuildIdenticalPrimaryKeyException<T>(Exception e, ResponseModel<T> response, string id);
-        ResponseModel<T> BuildEntityNotFound<T>(ResponseModel<T> response, string id, ErrorTypes errorType);
+        ResponseModel<T> BuildEntityNotFoundException<T>(ResponseModel<T> response, string id, ErrorTypes errorType);
+        ResponseModel<T> BuildMaliciousInputFoundException<T>(ResponseModel<T> response, string input, ErrorTypes errorType);
     }
 }

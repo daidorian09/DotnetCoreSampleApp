@@ -1,40 +1,40 @@
-﻿using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using SampleApp.Application.Common.Builders;
 using SampleApp.Application.Common.Enums;
 using SampleApp.Data;
 using SampleApp.Persistence.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace SampleApp.Application.Category.Commands.Delete
+namespace SampleApp.Application.Post.Commands.Delete
 {
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, ResponseModel<bool>>
+    public class DeletePostCommandHandler : IRequestHandler<DeletePostCommand, ResponseModel<bool>>
     {
         #region Members
 
-        private readonly IGenericRepository<Data.Category> _categoryRepository;
-        private readonly ILogger<DeleteCategoryCommandHandler> _logger;
+        private readonly IGenericRepository<Data.Post> _postRepository;
+        private readonly ILogger<DeletePostCommandHandler> _logger;
         private readonly ICustomExceptionBuilder _customExceptionBuilder;
 
         #endregion
 
         #region Ctor
 
-        public DeleteCategoryCommandHandler(IGenericRepository<Data.Category> categoryRepository,
-            ILogger<DeleteCategoryCommandHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
+        public DeletePostCommandHandler(IGenericRepository<Data.Post> postRepository,
+            ILogger<DeletePostCommandHandler> logger, ICustomExceptionBuilder customExceptionBuilder)
         {
-            _categoryRepository = categoryRepository;
+            _postRepository = postRepository;
             _logger = logger;
             _customExceptionBuilder = customExceptionBuilder;
         }
 
         #endregion
         
-        public async Task<ResponseModel<bool>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseModel<bool>> Handle(DeletePostCommand request, CancellationToken cancellationToken)
         {
             var response = new ResponseModel<bool>()
             {
@@ -46,14 +46,14 @@ namespace SampleApp.Application.Category.Commands.Delete
 
             try
             {
-                var category = await _categoryRepository.GetById(request.Id);
-                if (category is null)
+                var post = await _postRepository.GetById(request.Id);
+                if (post is null)
                 {
-                    _logger.LogWarning($"{request.Id} is deleted parent");
+                    _logger.LogWarning($"{request.Id} is deleted");
                     return _customExceptionBuilder.BuildEntityNotFoundException(response, request.Id, ErrorTypes.EntityNotFound);
                 }
 
-                await _categoryRepository.DeleteAsync(category);
+                await _postRepository.DeleteAsync(post);
                 response.Status = HttpStatusCode.OK;
                 response.IsSuccessful = true;
                 response.Result = true;

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SampleApp.Application.Common.Behaviors;
 using SampleApp.Application.Common.Builders;
 using SampleApp.Persistence.Internal;
+using SampleApp.Utility.Internal;
 using System.Reflection;
 
 namespace SampleApp.Application.Internal
@@ -18,6 +19,8 @@ namespace SampleApp.Application.Internal
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidation<,>));
             services.AddSingleton<ICustomExceptionBuilder, CustomExceptionBuilder>();
+
+            services.AddUtility();
         }
     }
 }

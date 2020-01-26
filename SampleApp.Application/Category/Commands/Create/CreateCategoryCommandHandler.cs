@@ -55,7 +55,7 @@ namespace SampleApp.Application.Category.Commands.Create
                     if (parentCategory is null)
                     {
                         _logger.LogWarning($"{request.ParentId} is deleted");
-                        return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.EntityNotFound);
+                        return _customExceptionBuilder.BuildEntityNotFoundException(response, request.Id, ErrorTypes.EntityNotFound);
                     }
                 }
 

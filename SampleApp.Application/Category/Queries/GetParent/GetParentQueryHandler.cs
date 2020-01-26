@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using SampleApp.Application.Category.Queries.GetById;
 using SampleApp.Application.Internal;
 using SampleApp.Data;
 using SampleApp.Persistence.Infrastructure;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using SampleApp.Application.Category.Queries.GetById;
 
 namespace SampleApp.Application.Category.Queries.GetParent
 {

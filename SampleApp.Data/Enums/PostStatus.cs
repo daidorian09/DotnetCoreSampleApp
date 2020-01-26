@@ -4,6 +4,7 @@
     {
         Approved = 1,
         Declined = 2,
-        NeedsWork = 3
+        NeedsWork = 3,
+        Pending = 4
     }
 }

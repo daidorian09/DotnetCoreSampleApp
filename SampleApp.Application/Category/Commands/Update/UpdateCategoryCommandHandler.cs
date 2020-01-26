@@ -53,23 +53,23 @@ namespace SampleApp.Application.Category.Commands.Update
                     parentCategory = await _categoryRepository.GetById(request.ParentId);
                     if (parentCategory is null)
                     {
-                        _logger.LogWarning($"{request.ParentId} is deleted parent");
-                        return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.EntityNotFound);
+                        _logger.LogWarning($"{request.ParentId} is deleted parent in UpdateCategoryCommandHandler");
+                        return _customExceptionBuilder.BuildEntityNotFoundException(response, request.Id, ErrorTypes.EntityNotFound);
                     }
 
                     var isParentAndCategorySame = parentCategory.Id.Equals(request.Id);
                     if (isParentAndCategorySame)
                     {
                         _logger.LogWarning("Child and Parent cannot be same");
-                        return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.CategoryAndParentSame);
+                        return _customExceptionBuilder.BuildEntityNotFoundException(response, request.Id, ErrorTypes.CategoryAndParentSame);
                     }
                 }
 
                 var category = await _categoryRepository.GetById(request.Id);
                 if (category is null)
                 {
-                    _logger.LogWarning($"{request.Id} is deleted");
-                    return _customExceptionBuilder.BuildEntityNotFound(response, request.Id, ErrorTypes.EntityNotFound);
+                    _logger.LogWarning($"{request.Id} is deleted in UpdateCategoryCommandHandler");
+                    return _customExceptionBuilder.BuildEntityNotFoundException(response, request.Id, ErrorTypes.EntityNotFound);
                 }
 
                 category.Description = request.Description;
